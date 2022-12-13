@@ -17,7 +17,7 @@ const borrar = () => {
   fav.value = []
 }
 const deshabilitar = computed(() => {
-  return fav.value.includes(contador.value) ? true : false
+  return fav.value.includes(contador.value)
 })
 const classDeshabilitar = computed(() => { 
   return !fav.value.includes(contador.value) ? 'btn btn-primary' : 'btn btn-secondary'
