@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-defineProps(['name','url'])
+defineProps(['name','url','favorites'])
 const pokemon = ref({})
 const visitar = (url) => { 
     fetch(url)
@@ -21,6 +21,16 @@ const imagen = ref(undefined)
                 <p>Url: {{url}}</p>
                 <img :src="imagen" alt="sprite" v-if="imagen">
                 <button @click="visitar(url)" v-if="!imagen">mostrar sprite</button>
+                <button v-if="!favorites.includes(name)" 
+                @click="$emit('addFavorite',name)" 
+                class="btn btn-outline-primary">
+                    Marcar favorito
+                </button>
+                <button v-else
+                @click="$emit('quitar',name)" 
+                class="btn btn-outline-danger">
+                    Quitar de favorito
+                </button>
             </div>
         </div>
     </div>
