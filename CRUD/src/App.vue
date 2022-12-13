@@ -3,20 +3,13 @@ import { ref } from 'vue';
 const contador = ref(0)
 const aumentar = () => {
   contador.value++
-  switch (true) {
-    case contador.value < 0:
-      aplicarClase.value = 'rojo'
-      break;
-    case contador.value > 0:
-      aplicarClase.value = 'verde'
-      break;
-    default:
-      aplicarClase.value = ''
-      break;
-  }
+  color()
 }
 const disminuir = () => {
   contador.value -= 1
+  color()
+}
+const color = () => {
   switch (true) {
     case contador.value < 0:
       aplicarClase.value = 'rojo'
@@ -29,7 +22,10 @@ const disminuir = () => {
       break;
   }
 }
-
+const reseteo = () => {
+  contador.value = 0
+  aplicarClase.value = ''
+}
 const aplicarClase = ref('')
 </script>
 
@@ -37,6 +33,7 @@ const aplicarClase = ref('')
   <h1>contador <strong :class="aplicarClase">{{ contador }}</strong></h1><br>
   <button @click="aumentar">aumentar</button>
   <button @click="disminuir">disminuir</button>
+  <button @click="reseteo">resetear</button>
 </template>
 
 <style>
