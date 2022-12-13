@@ -1,24 +1,22 @@
 <script setup>
-const name = 'crud'
-const azul = "color:aqua"
-const arrayColores = ['blue', 'red', 'aqua']
-const activo = false
-let pokemones = undefined
+import { ref } from 'vue';
+const name = 'crud';
+const azul = "color:aqua";
+const arrayColores = ['blue', 'red', 'aqua'];
+const activo = ref(false);
+const pokemones = [];
 const click1 = () => {
-  console.log('diste click en el boton')
-
-  fetch('https://pokeapi.co/api/v2/pokemon/')
-    .then(res => res.json())
-    .then(data => {
-      let prueba = []
-      data.results.forEach((element) => {
-        prueba.push(element);
-        console.log(`metemos ${element.name}`)
-      });
-      pokemones = prueba
-    })
-    .catch(error => console.log(error))
-}
+  activo.value = !activo.value
+  alert(`El estado actual es ${activo.value}`)
+};
+fetch('https://pokeapi.co/api/v2/pokemon/')
+  .then(res => res.json())
+  .then(data => {
+    data.results.forEach((element) => {
+      pokemones.push(element);
+    });
+  })
+  .catch(error => console.log(error))
 
 </script>
 
@@ -39,8 +37,8 @@ const click1 = () => {
   <br>
   <button @click="click1">activame</button>
   <br>
-  <div v-if="pokemones">
-    <h1>Pokemones lista</h1>
+  <div v-if="pokemones.length">
+    <h1>Pokemones list</h1>
     <ul>
       <li v-for="poke in pokemones" :key="name">{{ poke }}
         <ul v-for="prop in poke">{{ prop }}</ul>
