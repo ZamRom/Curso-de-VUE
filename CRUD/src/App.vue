@@ -23,7 +23,7 @@ const paginaSiguiente = () => {
 </script>
 
 <template>
-  <div>
+  <div v-if="posts.length">
     <PaginatedPost :limite="posts.length" :final="final" :inicio="inicio" class="my-2"
       @anterior="paginaAnterior" @siguiente="paginaSiguiente" />
     <div class="card mb-2" v-for="post in posts.slice(inicio, final)" :key="post.id">
