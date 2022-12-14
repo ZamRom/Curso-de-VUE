@@ -21,12 +21,12 @@ const imagen = ref(undefined)
                 <p>Url: {{url}}</p>
                 <img :src="imagen" alt="sprite" v-if="imagen">
                 <button @click="visitar(url)" v-if="!imagen">mostrar sprite</button>
-                <button v-if="!favorites.includes(name)" 
-                @click="$emit('addFavorite',name)" 
+                <button v-if="!favorites.includes(imagen) && imagen" 
+                @click="$emit('addFavorite',imagen)" 
                 class="btn btn-outline-primary">
                     Marcar favorito
                 </button>
-                <button v-else
+                <button v-if="favorites.includes(imagen) && imagen"
                 @click="$emit('quitar',name)" 
                 class="btn btn-outline-danger">
                     Quitar de favorito
