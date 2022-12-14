@@ -1,24 +1,30 @@
 <script setup>
 import axios from 'axios'
 import { ref, computed } from 'vue';
-const pokemones = ref([])
-const totalPokemones = ref(undefined)
-const previous = ref(false)
-const next = ref(undefined)
+const pokemones = computed(()=>{
+    return apiData.value.results
+})
+const totalPokemones = computed(() => {
+    return apiData.value.count
+})
+const previous = computed(()=>{
+    return apiData.value.previous
+})
+const next = computed(()=>{
+    return apiData.value.next
+})
 const limite = ref(20)
 const urlTest = computed(() => { return 'https://pokeapi.co/api/v2/pekemon?limit=' + limite.value })
-
- const obtenerPokemons = async (url = 'https://pokeapi.co/api/v2/pokemon') => {
+const apiData = ref(undefined)
+const obtenerPokemons = async (url = 'https://pokeapi.co/api/v2/pokemon') => {
     try {
         const dataG = await axios.get(url)
-        totalPokemones.value = dataG.data.count
-        pokemones.value = dataG.data.results
-        previous.value = dataG.data.previous
-        next.value = dataG.data.next
+        apiData.value = dataG.data
+
     } catch (e) {
         console.log(e)
     }
-} 
+}
 const anterior = () => obtenerPokemons(previous.value)
 const siguiente = () => obtenerPokemons(next.value)
 const disablePrev = computed(() => {
@@ -28,23 +34,20 @@ const disableNext = computed(() => {
     return next.value ? false : true
 })
 const nueva = () => {
-    let url=`https://pokeapi.co/api/v2/pokemon?limit=${limite.value}`
+    let url = `https://pokeapi.co/api/v2/pokemon?limit=${limite.value}`
     axios.get(url)
-    .then(dataG=>{
-        totalPokemones.value = dataG.data.count
-        pokemones.value = dataG.data.results
-        previous.value = dataG.data.previous
-        next.value = dataG.data.next
-    }).catch(e=>console.log(e))
+        .then(dataG => {
+            apiData.value = dataG.data
+        }).catch(e => console.log(e))
 
 }
 obtenerPokemons();
 </script>
 
 <template>
-    <div>
+    <div v-if="pokemones">
         <div class="card">
-            <template v-if="pokemones.length">
+            <template v-if="pokemones">
                 <input v-model="limite">
                 <button class="btn btn-outline-success" @click="nueva">
                     buscar
