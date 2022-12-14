@@ -1,10 +1,11 @@
 <script setup>
-defineProps(['limite'])
+defineProps(['limiteSuperior','limiteInferior'])
+
 </script>
 
 <template>
     <div>
-        <button @click="$emit('anterior')" class="btn btn-outline-primary">Anterior</button>
-        <button @click="$emit('siguiente')" class="btn btn-outline-primary mx-2">Siguiente</button>
+        <button @click="$emit('anterior')" class="btn btn-outline-primary" :disabled="limiteInferior">Anterior</button>
+        <button @click="$emit('siguiente')" class="btn btn-outline-primary mx-2" :disabled="limiteSuperior">Siguiente</button>
     </div>
 </template> 
