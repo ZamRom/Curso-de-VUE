@@ -1,5 +1,12 @@
 <script setup>
-defineProps(['limiteSuperior','limiteInferior'])
+import { computed } from 'vue';
+const propiedades = defineProps(['limite','inicio','final'])
+const limiteSuperior = computed(() => {
+  return propiedades.limite <= propiedades.final 
+})
+const limiteInferior = computed(() => {
+  return propiedades.inicio === 0 
+})
 
 </script>
 
