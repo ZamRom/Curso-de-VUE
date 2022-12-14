@@ -1,42 +1,38 @@
 <script setup>
-import { ref } from 'vue';
-import ButtonContador from './components/ButtonContador.vue'
-import BlogPostVue from './components/BlogPost.vue';
-const pokemones = ref([])
-const obtenerP = () => {
-  fetch('https://pokeapi.co/api/v2/pokemon')
-    .then(resp => resp.json())
-    .then(data => {
-      pokemones.value = data.results
-    })
+import { ref, computed } from 'vue';
+import PaginatedPost from './components/PaginatedPosts.vue'
+const posts = ref([])
+fetch('https://jsonplaceholder.typicode.com/posts')
+  .then(resp => resp.json())
+  .then(data => posts.value = data)
+const perPage = 5
+const inicio = ref(0)
+const final = ref(perPage)
+const paginaAnterior = () => {
+  if (inicio.value !== 0) {
+    inicio.value -= perPage
+    final.value -= perPage
+  }
 }
-const favorites = ref([])
-const Add = (name) => {
-  if (!favorites.value.includes(name)) favorites.value.push(name)
+const paginaSiguiente = () => {
+  inicio.value += perPage
+  final.value += perPage
 }
-const quitar = (name) => {
-  let indice = favorites.value.indexOf(name)
-  favorites.value.splice(indice, 1)
-}
+const limite = computed(() => { 
+  return posts.value.length - perPage
+ })
 </script>
 
 <template>
-  <div class="container">
-    <h1>Componentes:</h1>
-    <button @click="obtenerP">obtener Pokemones</button>  
-    <div class="container">
-      <div class="row aling-items-start">
-        <div class="col col-md-4 " v-for="imagen in favorites">
-          <div class="card" >
-            <div class="card-body">
-              <img :src="imagen" alt="sprite">
-            </div>
-          </div>
-        </div>
+  <div>
+    <PaginatedPost :limite="limite" class="my-2" @anterior="paginaAnterior" @siguiente="paginaSiguiente" />
+    <div class="card mb-2" v-for="post in posts.slice(inicio, final)" :key="post.id">
+      <div class="card-title">
+        Post Id : {{ post.id }} - {{ post.title }}
+      </div>
+      <div class="card-body">
+        {{ post.body }}
       </div>
     </div>
-    <BlogPostVue v-for="poke in pokemones" :key="poke.name" :name="poke.name" :url="poke.url" :favorites="favorites"
-      @addFavorite="Add" @quitar="quitar">
-    </BlogPostVue>
   </div>
 </template>
