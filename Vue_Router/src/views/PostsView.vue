@@ -1,22 +1,24 @@
 <script setup>
 import axios from 'axios'
 import { ref, computed } from 'vue';
-const pokemones = computed(()=>{
+//import { RouterLink } from 'vue-router';
+const pokemones = computed(() => {
     return apiData.value.results
 })
 const totalPokemones = computed(() => {
     return apiData.value.count
 })
-const previous = computed(()=>{
+const previous = computed(() => {
     return apiData.value.previous
 })
-const next = computed(()=>{
+const next = computed(() => {
     return apiData.value.next
 })
 const limite = ref(20)
 const urlTest = computed(() => { return 'https://pokeapi.co/api/v2/pekemon?limit=' + limite.value })
-const apiData = ref(undefined)
+const apiData = ref({})
 const obtenerPokemons = async (url = 'https://pokeapi.co/api/v2/pokemon') => {
+    apiData.value.results = []
     try {
         const dataG = await axios.get(url)
         apiData.value = dataG.data
@@ -34,6 +36,7 @@ const disableNext = computed(() => {
     return next.value ? false : true
 })
 const nueva = () => {
+    apiData.value.results = []
     let url = `https://pokeapi.co/api/v2/pokemon?limit=${limite.value}`
     axios.get(url)
         .then(dataG => {
@@ -63,7 +66,11 @@ obtenerPokemons();
                     Siguiente
                 </button>
                 <ul>
-                    <li class="capital" v-for="poke in pokemones" :key="poke.name">{{ poke.name }}</li>
+                    <li class="capital" v-for="poke in pokemones" :key="poke.name">
+                        <RouterLink :to="{ name: 'pokemon', params: { poke: poke.name } }">
+                            {{ poke.name }}
+                        </RouterLink>
+                    </li>
                 </ul>
             </div>
         </div>
