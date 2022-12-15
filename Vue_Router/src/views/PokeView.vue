@@ -6,14 +6,17 @@ import { useGetData } from '@/composables/getData'
 const route = useRoute()
 const router = useRouter()
 
-const { loading, apiData, getData } = useGetData()
+const { loading, apiData, getData, error } = useGetData()
 getData(`https://pokeapi.co/api/v2/pokemon/${route.params.poke}`)
 </script>
 <template>
-    <div v-if="loading">
+    <p v-if="loading">
         Cargando...
+    </p>
+    <div class="alert alert-danger" v-if="error">
+        {{ error }}
     </div>
-    <div v-else>
+    <div v-if="apiData.name">
         <h1>el nombre del pokemon es: {{ apiData.name }} </h1><br>
         <img :src="apiData.sprites.front_default" alt="">
         <img :src="apiData.sprites.front_shiny" alt=""><br>
@@ -32,7 +35,7 @@ getData(`https://pokeapi.co/api/v2/pokemon/${route.params.poke}`)
         </ul>
         <button class="btn btn-outline-primary">
             <RouterLink :to="{ name: 'posts' }">
-                Regresar a Posts
+                Regresar a Pokemones
             </RouterLink>
         </button>
 

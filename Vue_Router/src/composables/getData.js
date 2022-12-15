@@ -1,27 +1,32 @@
 import { ref } from "vue"
 import axios from 'axios'
+import { useRouter } from "vue-router"
 
-export const useGetData = () => { 
+export const useGetData = () => {
+    const error = ref(undefined)
+    const router = useRouter()
     const loading = ref(false)
     const apiData = ref({})
-    const getData = async (url) => { 
+    const getData = async (url) => {
         loading.value = true
         try {
             const dataG = await axios.get(url)
             apiData.value = dataG.data
-    
         } catch (e) {
-            console.log(e)
+            setTimeout(() => {
+                router.push({ name: '404' })
+            }, 1000)
+            error.value = e.message
         } finally {
             loading.value = false
         }
-     }
-     
-     return {
+    }
+
+    return {
         apiData,
         getData,
-        loading
-     }
- }
+        loading,
+        error
+    }
+}
 
- 

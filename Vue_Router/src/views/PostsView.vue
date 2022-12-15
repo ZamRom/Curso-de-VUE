@@ -17,8 +17,6 @@ const next = computed(() => {
 })
 const limite = ref(20)
 const urlTest = computed(() => { return 'https://pokeapi.co/api/v2/pekemon?limit=' + limite.value })
-const anterior = () => getData(previous.value)
-const siguiente = () => getData(next.value)
 const disablePrev = computed(() => {
     return previous.value ? false : true
 })
@@ -48,11 +46,11 @@ getData('https://pokeapi.co/api/v2/pokemon')
             </template>
             <div class="card-body">
                 <h1>lista de pokemones: </h1>
-                <button class="btn btn-outline-primary" @click="anterior" :disabled="disablePrev">
+                <button class="btn btn-outline-success" @click="getData(apiData.previous)" :disabled="disablePrev">
                     Previo
                 </button>
 
-                <button class="btn btn-outline-primary mx-2" @click="siguiente" :disabled="disableNext">
+                <button class="btn btn-outline-primary mx-2" @click="getData(apiData.next)" :disabled="disableNext">
                     Siguiente
                 </button>
                 <ul>
