@@ -1,8 +1,8 @@
 <script setup>
 import { ref, computed } from 'vue';
-import {useGetData} from '@/composables/getData'
+import { useGetData } from '@/composables/getData'
 
-const {apiData,getData, loading} = useGetData()
+const { apiData, getData, loading } = useGetData()
 const pokemones = computed(() => {
     return apiData.value.results
 })
@@ -46,18 +46,22 @@ getData('https://pokeapi.co/api/v2/pokemon')
             </template>
             <div class="card-body">
                 <h1>lista de pokemones: </h1>
-                <button class="btn btn-outline-success" @click="getData(apiData.previous)" :disabled="disablePrev">
-                    Previo
-                </button>
-
-                <button class="btn btn-outline-primary mx-2" @click="getData(apiData.next)" :disabled="disableNext">
-                    Siguiente
-                </button>
-                <ul>
-                    <li class="capital" v-for="poke in pokemones" :key="poke.name">
-                        <RouterLink :to="{ name: 'pokemon', params: { poke: poke.name } }">
-                            {{ poke.name }}
-                        </RouterLink>
+                <div class="mb-2">
+                    <button class="btn btn-outline-success" @click="getData(apiData.previous)" :disabled="disablePrev">
+                        Previo
+                    </button>
+                    <button class="btn btn-outline-primary mx-2" @click="getData(apiData.next)" :disabled="disableNext">
+                        Siguiente
+                    </button>
+                </div>
+                <ul class="list-group">
+                    <li class="capital list-group-item" v-for="poke in pokemones" :key="poke.name">
+                        {{ poke.name }}
+                        <button class="btn btn-outline-primary">
+                            <RouterLink :to="{ name: 'pokemon', params: { poke: poke.name } }">
+                                Mas informacion
+                            </RouterLink>
+                        </button>
                     </li>
                 </ul>
             </div>

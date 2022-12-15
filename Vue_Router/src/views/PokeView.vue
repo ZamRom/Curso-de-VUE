@@ -1,11 +1,19 @@
 <script setup>
 import { useRoute, useRouter } from 'vue-router';
 import { useGetData } from '@/composables/getData'
+import { computed } from 'vue';
+import {useFavoriteStore} from '@/store/favoritos.js'
+import { storeToRefs } from 'pinia';
 
-
+const useFavorite = useFavoriteStore()
 const route = useRoute()
 const router = useRouter()
 
+const existe = computed (() => { 
+    return favorites.value.find(x => x.id === apiData.value.id) ? true : false
+ })
+const {addFavorite, rmvFavorite} = useFavorite
+const {favorites} = storeToRefs(useFavorite)
 const { loading, apiData, getData, error } = useGetData()
 getData(`https://pokeapi.co/api/v2/pokemon/${route.params.poke}`)
 </script>
@@ -33,9 +41,21 @@ getData(`https://pokeapi.co/api/v2/pokemon/${route.params.poke}`)
                 {{ stat.stat.name }} : {{ stat.base_stat }}
             </li>
         </ul>
+        <button class="btn btn-outline-success ms-2" @click="addFavorite(apiData)" v-if="!existe">
+            Añadir a Favoritos
+        </button>
+        <button class="btn btn-outline-danger ms-2" @click="rmvFavorite(apiData.id)" v-else>
+            Eliminar de Favoritos
+        </button>
+        <hr>
         <button class="btn btn-outline-primary">
             <RouterLink :to="{ name: 'posts' }">
                 Regresar a Pokemones
+            </RouterLink>
+        </button>
+        <button class="btn btn-outline-primary ms-2" v-if="favorites.length">
+            <RouterLink :to="{ name: 'favorites' }">
+                Visitar favoritos
             </RouterLink>
         </button>
 

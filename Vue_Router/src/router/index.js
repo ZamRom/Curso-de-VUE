@@ -31,7 +31,12 @@ const router = createRouter({
       path: '/no-encontrado',
       name: '404',
       component: () => import('../views/NotFoundView.vue')
-    }
+    },
+    {
+      path: '/pokemones/favorites',
+      name: 'favorites',
+      component: () => import('../views/FavoritesView.vue')
+    },
   ]
 })
 
