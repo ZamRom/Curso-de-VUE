@@ -1,6 +1,5 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
 </script>
 
 <template>
@@ -8,12 +7,15 @@ import HelloWorld from './components/HelloWorld.vue'
     <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
 
     <div class="wrapper">
-      <HelloWorld msg="You did it!" />
 
       <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-        <RouterLink :to="{ name: 'posts' }">Posts</RouterLink>
+        <h1>PokeApi</h1>
+        <button class="btn btn-outline-primary mb-2">
+          <RouterLink to="/">Home</RouterLink>
+        </button>
+        <button class="btn btn-outline-primary">
+          <RouterLink :to="{ name: 'posts' }">Pokemones</RouterLink>
+        </button>
       </nav>
     </div>
   </header>

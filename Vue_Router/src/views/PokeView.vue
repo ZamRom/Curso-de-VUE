@@ -1,26 +1,22 @@
 <script setup>
-import axios from 'axios'
 import { useRoute, useRouter } from 'vue-router';
-import { ref } from 'vue';
-const apiData = ref(undefined)
+import { useGetData } from '@/composables/getData'
+
+
 const route = useRoute()
 const router = useRouter()
-const getData = async () => {
-    try {
-        const dataG = await axios.get(`https://pokeapi.co/api/v2/pokemon/${route.params.poke}`)
-        apiData.value = dataG.data
 
-    } catch (e) {
-        console.log(e)
-        router.push({ name: '404' }).catch(() => { })
-    }
-}
-getData()
+const { loading, apiData, getData } = useGetData()
+getData(`https://pokeapi.co/api/v2/pokemon/${route.params.poke}`)
 </script>
-<template v-if="apiData">
-    <div>
+<template>
+    <div v-if="loading">
+        Cargando...
+    </div>
+    <div v-else>
         <h1>el nombre del pokemon es: {{ apiData.name }} </h1><br>
-        <img :src="apiData.sprites.front_default" alt=""><br>
+        <img :src="apiData.sprites.front_default" alt="">
+        <img :src="apiData.sprites.front_shiny" alt=""><br>
         <h2>Es de tipo:</h2>
         <ul>
             <li v-for="(type, index) in apiData.types" :key="index">
@@ -34,8 +30,11 @@ getData()
                 {{ stat.stat.name }} : {{ stat.base_stat }}
             </li>
         </ul>
-        <RouterLink :to="{ name: 'posts' }">
-            Regresar a Posts
-        </RouterLink>
+        <button class="btn btn-outline-primary">
+            <RouterLink :to="{ name: 'posts' }">
+                Regresar a Posts
+            </RouterLink>
+        </button>
+
     </div>
 </template>

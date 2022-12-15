@@ -1,7 +1,8 @@
 <script setup>
-import axios from 'axios'
 import { ref, computed } from 'vue';
-//import { RouterLink } from 'vue-router';
+import {useGetData} from '@/composables/getData'
+
+const {apiData,getData, loading} = useGetData()
 const pokemones = computed(() => {
     return apiData.value.results
 })
@@ -16,19 +17,8 @@ const next = computed(() => {
 })
 const limite = ref(20)
 const urlTest = computed(() => { return 'https://pokeapi.co/api/v2/pekemon?limit=' + limite.value })
-const apiData = ref({})
-const obtenerPokemons = async (url = 'https://pokeapi.co/api/v2/pokemon') => {
-    apiData.value.results = []
-    try {
-        const dataG = await axios.get(url)
-        apiData.value = dataG.data
-
-    } catch (e) {
-        console.log(e)
-    }
-}
-const anterior = () => obtenerPokemons(previous.value)
-const siguiente = () => obtenerPokemons(next.value)
+const anterior = () => getData(previous.value)
+const siguiente = () => getData(next.value)
 const disablePrev = computed(() => {
     return previous.value ? false : true
 })
@@ -38,17 +28,17 @@ const disableNext = computed(() => {
 const nueva = () => {
     apiData.value.results = []
     let url = `https://pokeapi.co/api/v2/pokemon?limit=${limite.value}`
-    axios.get(url)
-        .then(dataG => {
-            apiData.value = dataG.data
-        }).catch(e => console.log(e))
+    getData(url)
 
 }
-obtenerPokemons();
+getData('https://pokeapi.co/api/v2/pokemon')
 </script>
 
 <template>
-    <div v-if="pokemones">
+    <div v-if="loading">
+        Cargando...
+    </div>
+    <div v-else>
         <div class="card">
             <template v-if="pokemones">
                 <input v-model="limite">
