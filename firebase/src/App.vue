@@ -1,29 +1,32 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterLink, RouterView, useRouter } from 'vue-router'
 import { useUserStore } from '../src/store/user'
 const userStore = useUserStore()
 
+const router = useRouter()
+const salir = async () => {
+  try {
+    await userStore.logoutUser()
+    router.push({ name: 'login' })
+  } catch (error) {
+    console.log(error)
+  }
+}
 </script>
 
 <template>
+
   <div>
-    <h1>Welcome {{userStore.userData}}</h1>
+    <template v-if="userStore.userData.email">
+      <h1>Welcome {{ userStore.userData.email }}</h1>
+      <RouterLink :to="{ name: 'home' }">home</RouterLink>
+      <button @click="salir">Cerrar sesion</button>
+    </template>
+    <template v-else>
+      <RouterLink :to="{ name: 'login' }"> Login</RouterLink>
+      <RouterLink :to="{ name: 'register' }">Register</RouterLink>
+    </template>
+
   </div>
   <RouterView />
 </template>
-
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-}
-
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>

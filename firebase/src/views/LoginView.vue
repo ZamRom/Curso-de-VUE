@@ -1,21 +1,29 @@
 <script setup>
 import { ref } from 'vue';
-import {useUserStore} from '../store/user'
+import { useRouter } from 'vue-router';
+import { useUserStore } from '../store/user'
 
+const router = useRouter()
 const userStore = useUserStore()
-const nombre = ref('')
+const email = ref('')
+const password = ref('')
+
+const enviar = async() => { 
+    if (!email.value || !password.value) {
+        return alert('Llena los campos')
+    }
+    await userStore.loginUser(email.value,password.value)
+    router.push({name:'home'})
+ }
 </script>
 
 <template>
     <div>
-        <div class="mb-3">
-            <label for="exampleFormControlInput1" class="form-label">Correo</label>
-            <input type="email" class="form-control" id="exampleFormControlInput1" v-model="nombre">
-            <button 
-            class="btn btn-secondary mt-2"
-            @click="userStore.actualizar(nombre)">
-                Login
-            </button>
-        </div>
+        <h1>Login</h1>
+        <form @submit.prevent="enviar">
+            <input type="email" placeholder="Escribir email" v-model="email">
+            <input type="password" placeholder="Escribir contraseña" v-model="password">
+            <button type="submit">Login</button>
+        </form>
     </div>
 </template>
